@@ -28,4 +28,5 @@ w-screen
 h-screen
 bg-black
 text-white
+px-7
 `;

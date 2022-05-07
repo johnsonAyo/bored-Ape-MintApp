@@ -10,6 +10,7 @@ import {
 
 const Minting = () => {
   const [totalSupply, setTotalSupply] = useState(0);
+  const [completed, setCompleted] = useState();
   const [inProgress, setInProgress] = useState(false);
   const address = useAddress();
   const connectWithMetamask = useMetamask();
@@ -25,7 +26,19 @@ const Minting = () => {
       const tx = await editionDrop.claimTo(address, 0, 1);
       console.log(tx);
       setInProgress(false);
+      setCompleted(true);
     }
+  };
+
+  const viewOpenSea = () => {
+    const url = "https://testnets.opensea.io/collection/bored-ape-testnet";
+    window.open(url, "_blank");
+  };
+
+  const startOver = () => {
+    setCompleted(false);
+    setInProgress(false);
+    disconnectWallet();
   };
 
   useEffect(() => {
@@ -51,14 +64,19 @@ const Minting = () => {
         <ButtonContainer>
           {address ? (
             <>
-              <FilledButton disabled={inProgress} onClick={mint}>
-                {inProgress ? (
-                  <ReactLoading type="bubbles" color="black" height="64" />
-                ) : (
-                  <> Mint </>
-                )}
-              </FilledButton>
-              <UnFilledButton disabled={inProgress} onClick={disconnectWallet}>
+              {completed ? (
+                <FilledButton onClick={viewOpenSea}>View Opensea</FilledButton>
+              ) : (
+                <FilledButton disabled={inProgress} onClick={mint}>
+                  {inProgress ? (
+                    <ReactLoading type="bubbles" color="black" height="64" />
+                  ) : (
+                    <> Mint </>
+                  )}
+                </FilledButton>
+              )}
+
+              <UnFilledButton disabled={inProgress} onClick={startOver}>
                 Disconnect
               </UnFilledButton>
             </>
