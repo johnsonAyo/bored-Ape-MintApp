@@ -1,12 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ReactLoading from "react-loading";
 import tw from "tailwind-styled-components";
-import { useAddress, useDisconnect, useMetamask } from "@thirdweb-dev/react";
+import {
+  useAddress,
+  useDisconnect,
+  useMetamask,
+  useEditionDrop,
+} from "@thirdweb-dev/react";
 
 const Minting = () => {
+  const [totalSupply, setTotalSupply] = useState(0);
+  const [inProgress, setInProgress] = useState(false);
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
+  const editionDrop = useEditionDrop(
+    "0xc20d75b1eE20BC3d1529ef36C70D341ca57F05BD"
+  );
   console.log(address);
+
+  const mint = async () => {
+    if (editionDrop && address) {
+      setInProgress(true);
+      const tx = await editionDrop.claimTo(address, 0, 1);
+      console.log(tx);
+      setInProgress(false);
+    }
+  };
+
+  useEffect(() => {
+    const getTotal = async () => {
+      if (editionDrop) {
+        const total = await editionDrop.totalSupply(0);
+        setTotalSupply(total.toNumber());
+      }
+    };
+    getTotal();
+  }, [editionDrop]);
   return (
     <Container>
       <Mint>
@@ -16,14 +46,21 @@ const Minting = () => {
             <br /> the Bored Ape <br />
             Yatch Club
           </Title>
+          <Count>{address && totalSupply}</Count>
         </TitleContainer>
         <ButtonContainer>
           {address ? (
             <>
-              <FilledButton onClick={connectWithMetamask}> Mint </FilledButton>
-              <FilledButton onClick={disconnectWallet}>
-                Disconnect
+              <FilledButton disabled={inProgress} onClick={mint}>
+                {inProgress ? (
+                  <ReactLoading type="bubbles" color="black" height="64" />
+                ) : (
+                  <> Mint </>
+                )}
               </FilledButton>
+              <UnFilledButton disabled={inProgress} onClick={disconnectWallet}>
+                Disconnect
+              </UnFilledButton>
             </>
           ) : (
             <FilledButton onClick={connectWithMetamask}>
@@ -79,4 +116,20 @@ const FilledButton = tw.button`
 
 flex-1
 grow
-bg-[#bfc500] text-black hover:bg-white font-bold py-2 px-4 rounded uppercase`;
+bg-[#bfc500] text-black hover:bg-white font-bold py-2 px-4 rounded uppercase h-14`;
+
+const UnFilledButton = tw(FilledButton)`
+bg-black 
+text-[#bfc500]
+border-2
+border-[#bfc500]
+hover:bg-[#bfc500]
+hover:text-black
+`;
+
+const Count = tw.div`
+flex
+grow
+items-center
+justify-center
+`;
