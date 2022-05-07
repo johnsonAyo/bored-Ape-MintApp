@@ -6,7 +6,7 @@ const Main = () => {
   return (
     <Container>
       <VideoContainer>
-        <Video src="./video.mp4" muted={true} autoPlay={true} looping={true} />
+        <Video src="./video.mp4" muted={true} autoPlay={true} />
       </VideoContainer>
       <Minting />
     </Container>

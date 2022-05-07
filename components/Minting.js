@@ -1,7 +1,12 @@
 import React from "react";
 import tw from "tailwind-styled-components";
+import { useAddress, useDisconnect, useMetamask } from "@thirdweb-dev/react";
 
 const Minting = () => {
+  const address = useAddress();
+  const connectWithMetamask = useMetamask();
+  const disconnectWallet = useDisconnect();
+  console.log(address);
   return (
     <Container>
       <Mint>
@@ -13,7 +18,18 @@ const Minting = () => {
           </Title>
         </TitleContainer>
         <ButtonContainer>
-          <FilledButton> Connect Wallet</FilledButton>
+          {address ? (
+            <>
+              <FilledButton onClick={connectWithMetamask}> Mint </FilledButton>
+              <FilledButton onClick={disconnectWallet}>
+                Disconnect
+              </FilledButton>
+            </>
+          ) : (
+            <FilledButton onClick={connectWithMetamask}>
+              Connect Wallet
+            </FilledButton>
+          )}
         </ButtonContainer>
       </Mint>
     </Container>
@@ -54,11 +70,13 @@ pr-4
 const ButtonContainer = tw.div`
 flex
 mt-2
-
+gap-4
 
 
 `;
 
 const FilledButton = tw.button`
+
+flex-1
 grow
 bg-[#bfc500] text-black hover:bg-white font-bold py-2 px-4 rounded uppercase`;
