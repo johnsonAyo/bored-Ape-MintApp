@@ -20,4 +20,5 @@ flex
 justify-center
 `;
 
-const HeaderContainer = tw.div``;
+const HeaderContainer = tw.div`
+mt-[30px]`;

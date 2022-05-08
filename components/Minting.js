@@ -110,6 +110,8 @@ mt-3`;
 
 const Mint = tw.div`
  max-w-screen-sm
+ lg:w-1/3
+ md:w-1/2
  bg-black 
  mt-[-200px]
 w-1/3
