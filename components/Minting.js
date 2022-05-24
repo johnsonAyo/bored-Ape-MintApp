@@ -103,7 +103,10 @@ flex`;
 
 const Title = tw.h2`
 uppercase
-text-3xl
+lg:text-3xl
+md:text-2xl
+text-2xl
+
 italic
 font-bold
 mt-3`;
@@ -112,9 +115,9 @@ const Mint = tw.div`
  max-w-screen-sm
  lg:w-1/3
  md:w-1/2
+
  bg-black 
- mt-[-200px]
-w-1/3
+ lg:mt-[-200px]
 z-50
 flex
 flex-col
